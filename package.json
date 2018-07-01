@@ -1,0 +1,9 @@
+{
+  "name": "SurveyApp",
+  "version": "1.0.0",
+  "description": "Udemy Course - React + Redux + Node.js + Express + MongoDB",
+  "main": "index.js",
+  "repository": "git@github.com:LucasMatuszewski/Udemy-Node-React-SurveyApp.git",
+  "author": "Lukasz",
+  "license": "MIT"
+}
