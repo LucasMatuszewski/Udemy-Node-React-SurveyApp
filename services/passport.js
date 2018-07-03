@@ -35,7 +35,9 @@ passport.use(
         {
             clientID: keys.googleClientID,
             clientSecret: keys.googleClientSecret,
-            callbackURL: '/auth/google/callback'
+            callbackURL: '/auth/google/callback', // we use relative directory to serve both DEV and PROD
+            // by default Passport don't trust a Heroku Proxy and change URL from https: to http:
+            proxy: true // this optional Passport's setting make it to trust Proxy, and set https://
         },
         (accessToken, refreshToken, profile, done) => {
             // Check if user with this Google ID already exists in our DB
