@@ -39,32 +39,24 @@ passport.use(
             // by default Passport don't trust a Heroku Proxy and change URL from https: to http:
             proxy: true // this optional Passport's setting make it to trust Proxy, and set https://
         },
-        (accessToken, refreshToken, profile, done) => {
+        async (accessToken, refreshToken, profile, done) => {
             // Check if user with this Google ID already exists in our DB
-            User.findOne({ googleId: profile.id }) // Asynchronous Query
-                // findOne returns a Promise, so we use .then on success
-                .then(existingUser => {
-                    // then is async = start immediately, but return when Promise finished work
-                    if (existingUser) {
-                        // done (property for GoogleStrategy Callback) tells Passport: SignUp is done
-                        done(null, existingUser); //done(err, return)
-                    } else {
-                        // create new object of class User (Model Instance)
-                        new User({
-                            googleId: profile.id,
-                            name: profile.name.givenName,
-                            surname: profile.name.familyName,
-                            email: profile.emails[0].value
-                            // new User creates Mongoose Model Instance inside JS, but not saved to DB
-                        })
-                            .save() // We have to use .save() to send data to DB
-                            //after async save() finish its work, .then() will callback done() to Passport
-                            .then(
-                                user => done(null, user),
-                                error => console.log(error)
-                            );
-                    }
-                });
+            const existingUser = await User.findOne({ googleId: profile.id }); // Asynchronous Query
+            if (existingUser) {
+                // done (property for GoogleStrategy Callback) tells Passport: SignUp is done
+                return done(null, existingUser); //done(err, return)
+            } //  else { // With RETURN we don't need: else {}
+            // create new object of class User (Model Instance)
+            const user = await new User({
+                googleId: profile.id,
+                name: profile.name.givenName,
+                surname: profile.name.familyName,
+                email: profile.emails[0].value
+                // new User creates Mongoose Model Instance inside JS, but not saved to DB
+            }).save(); // We have to use .save() to send data to DB
+            //after async save() finish its work, done() save data to Passport
+            done(null, user);
+            // What with ERROR Handling? error => console.log(error)
 
             console.log('access token:', accessToken);
             // it will print token from Google after authentication and redirect to:
