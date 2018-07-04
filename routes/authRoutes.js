@@ -28,12 +28,6 @@ module.exports = app => {
         // { -passport: { user: "f0sjf09sjdfjas03q  MongoDB ID  dasdsfwr3wf"} }
     });
 
-    app.get('/', (req, res) => {
-        // callback arrow function
-        res.send({
-            id: 'Hello!!!'
-        }); //JSON data
-    });
     /**
      * app.get      - Get info
      * app.post     - Send info

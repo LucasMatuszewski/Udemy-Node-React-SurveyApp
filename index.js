@@ -32,10 +32,25 @@ app.use(
 app.use(passport.initialize()); // we start passport on user visit
 app.use(passport.session()); // we start passport session on user visit
 
+//ROUTES:
+
 // start Router and pass Express app to it (don't need to import app=express inside router):
 //authRoutes(app);
 //SHORTHAND:
 require('./routes/authRoutes')(app);
+
+////////////// MY VERSION (based on React 2nd Budget - Udemy course) ////////////////////
+// I was trying to make a static server for React App (it was working on DEV but without OAuth)
+const path = require('path'); //Node method to get a root path to a folder where this file is (depending on a computer/server where it is)
+//create a absolute path to a directory with our public folder:
+const publicPath = path.join(__dirname, 'client', 'build');
+// Set default folder with static files for our app
+app.use(express.static(publicPath));
+// Route to our REACT App
+app.get('/', (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+});
+/////////////////////////////// END OF MY VERSION ///////////////////////////////////////
 
 // Express tells Node.js to listen on port 5000
 app.listen(PORT, () => {
